@@ -11,6 +11,7 @@ public interface RestaurantDao {
 
     //read
     List<Restaurant> getAll();
+    Restaurant findById(int id);
     // void addRestaurantToFoodType(Restaurant restaurant, Foodtype foodtype);
 
     //update
