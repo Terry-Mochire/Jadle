@@ -1,4 +1,4 @@
-SET MODE postreSQL;
+SET MODE PostgreSQL;
 
 CREATE TABLE IF NOT EXISTS restaurants(
     id int PRIMARY KEY auto_increment,
