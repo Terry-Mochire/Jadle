@@ -61,7 +61,7 @@ class Sql2oReviewDaoTest {
     }
 
     @Test
-    void getAllReturnsAllAddedReviews() {
+    void getAllReturnsAllAddedReviews() throws Exception {
         Review testReview = setUpReview();
         Review testReview2 = setUpReview();
         reviewDao.add(testReview);

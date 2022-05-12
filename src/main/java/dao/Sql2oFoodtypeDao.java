@@ -1,6 +1,7 @@
 package dao;
 
 import models.Foodtype;
+import models.Restaurant;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -26,11 +27,21 @@ public class Sql2oFoodtypeDao implements FoodtypeDao{
     }
 
     @Override
+    public void addFoodtypeToRestaurant(Foodtype foodtype, Restaurant restaurant) {
+
+    }
+
+    @Override
     public List<Foodtype> getAll() {
         try(Connection con = sql2o.open()){
             return con.createQuery("SELECT * FROM foodtypes")
                     .executeAndFetch(Foodtype.class);
         }
+    }
+
+    @Override
+    public List<Restaurant> getAllRestaurantsForAFoodtype(int id) {
+        return null;
     }
 
     @Override

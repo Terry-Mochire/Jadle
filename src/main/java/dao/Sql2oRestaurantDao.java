@@ -1,5 +1,6 @@
 package dao;
 
+import models.Foodtype;
 import models.Restaurant;
 import models.Review;
 import org.sql2o.Connection;
@@ -30,6 +31,11 @@ public class Sql2oRestaurantDao implements RestaurantDao{
     }
 
     @Override
+    public void addRestaurantToFoodType(Restaurant restaurant, Foodtype foodtype) {
+
+    }
+
+    @Override
     public List <Restaurant> getAll() {
         try (Connection con = sql2o.open()) {
             return con.createQuery("SELECT * FROM restaurants")
@@ -44,6 +50,11 @@ public class Sql2oRestaurantDao implements RestaurantDao{
                     .addParameter("id", id)
                     .executeAndFetchFirst(Restaurant.class);
         }
+    }
+
+    @Override
+    public List<Foodtype> getAllFoodtypesByRestaurant(int restaurantId) {
+        return null;
     }
 
     @Override

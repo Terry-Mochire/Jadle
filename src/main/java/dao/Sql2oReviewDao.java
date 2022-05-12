@@ -16,14 +16,10 @@ public class Sql2oReviewDao implements ReviewDao{
 
     @Override
     public void add(Review review) {
-        String sql = "INSERT INTO reviews(writtenby, content, rating, restaurantid) VALUES (:writtenby, :content, :rating, :restaurantid)";
+        String sql = "INSERT INTO reviews(writtenby, content, rating, restaurantid) VALUES (:writtenBy, :content, :rating, :restaurantId)";
         try (Connection con = sql2o.open()){
             int id = (int) con.createQuery(sql, true)
                     .bind(review)
-                    .addParameter("writtenby", review.getWrittenBy())
-                    .addParameter("content", review.getContent())
-                    .addParameter("rating", review.getRating())
-                    .addParameter("restaurantid", review.getRestaurantId())
                     .executeUpdate()
                     .getKey();
             review.setId(id);
@@ -39,9 +35,10 @@ public class Sql2oReviewDao implements ReviewDao{
            return con.createQuery(sql)
                    .executeAndFetch(Review.class);
        }
-    }
 
-    @Override
+       }
+
+   @Override
     public List<Review> getAllReviewsByRestaurant(int restaurantid) {
         String sql = "SELECT * FROM reviews WHERE restaurantid=:restaurantid";
         try(Connection con = sql2o.open()){
