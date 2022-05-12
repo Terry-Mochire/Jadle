@@ -1,6 +1,7 @@
 package dao;
 
 import models.Foodtype;
+import models.Restaurant;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +37,18 @@ class Sql2oFoodtypeDaoTest {
         return new Foodtype("Sushi");
     }
 
+    public Restaurant setupRestaurant (){
+        Restaurant restaurant = new Restaurant("Fish Omena", "214 NE Ngara", "97232", "254-402-9874", "http://fishwitch.com", "hellofishy@fishwitch.com");
+        restaurantDao.add(restaurant);
+        return restaurant;
+    }
+
+    public Restaurant setupAltRestaurant (){
+        Restaurant restaurant = new Restaurant("Fish Omena", "214 NE Ngara", "97232", "254-402-9874");
+        restaurantDao.add(restaurant);
+        return restaurant;
+    }
+
     @Test
     void addFoodSetsId() throws Exception {
         Foodtype testFoodtype = setupNewFoodtype();
@@ -65,5 +78,41 @@ class Sql2oFoodtypeDaoTest {
         Foodtype otherFoodtype = setupNewFoodtype();
         foodtypeDao.clearAll();
         assertEquals(0, foodtypeDao.getAll().size());
+    }
+
+    @Test
+    public void addFoodtypeToRestaurantAddsTypeCorrectly() throws Exception{
+        Restaurant testRestaurant = setupRestaurant();
+        Restaurant altRestaurant = setupAltRestaurant();
+
+        restaurantDao.add(testRestaurant);
+        restaurantDao.add(altRestaurant);
+
+        Foodtype testFoodType = setupNewFoodtype();
+        foodtypeDao.add(testFoodType);
+
+        foodtypeDao.addFoodtypeToRestaurant(testFoodType, testRestaurant);
+        foodtypeDao.addFoodtypeToRestaurant(testFoodType, altRestaurant);
+
+        assertEquals(2, foodtypeDao.getAllRestaurantsForAFoodtype(testFoodType.getId()));
+
+    }
+
+    @Test
+    public void deleteingRestaurantAlsoUpdatesJoinTable() throws Exception {
+        Foodtype testFoodtype  = new Foodtype("Seafood");
+        foodtypeDao.add(testFoodtype);
+
+        Restaurant testRestaurant = setupRestaurant();
+        restaurantDao.add(testRestaurant);
+
+        Restaurant altRestaurant = setupAltRestaurant();
+        restaurantDao.add(altRestaurant);
+
+        restaurantDao.addRestaurantToFoodType(testRestaurant,testFoodtype);
+        restaurantDao.addRestaurantToFoodType(altRestaurant, testFoodtype);
+
+        restaurantDao.deleteById(testRestaurant.getId());
+        assertEquals(0, restaurantDao.getAllFoodtypesByRestaurant(testRestaurant.getId()).size());
     }
 }
